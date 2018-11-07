@@ -167,11 +167,11 @@ function buildResponse(options) {
 
 function handleLaunchRequest(context) {
     let options = {};
-    let lanuchWelcomeMessage = "Vocal Conference can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask vocal conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask Vocal Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill.";
+    let lanuchWelcomeMessage = "Audio Conference can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask Audio conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask Audio Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill.";
     options.speechText = lanuchWelcomeMessage;
     options.cardContent = lanuchWelcomeMessage;
-    options.cardTitle = "Vocal Conference";
-    options.imageObj = conferenceImg;
+    options.cardTitle = "Audio Conference";
+    //options.imageObj = conferenceImg;
     options.endSession = true;
 
     //Outputting the userInfo JSON to the console
@@ -237,9 +237,9 @@ function handleStartIntent(request, context, amazonId) {
         //If no previous data exists for the current user, throw an error and refresh the data
     } else {
 
-        options.speechText = "Unknown usage error.The data associated with your Amazon ID for this skill was not able to be retrieved.Your data has been refreshed.Please start over and try again!";
-        options.cardContent = "Unknown usage error.  The data associated with your Amazon ID for this skill was not able to be retrieved.  Your data has been refreshed.  Please start over and try again!";
-        //options.imageObj = phoneErrorImg;
+        let phoneErrMsg = "Unknown usage error.The data associated with your Amazon ID for this skill was not able to be retrieved.Your data has been refreshed.Please start over and try again!";;
+        options.speechText = phoneErrMsg;
+        options.cardContent = phoneErrMsg; //options.imageObj = phoneErrorImg;
         options.cardTitle = "ERROR: Audio Conference Start";
 
         //Creating an info JSON to store specific intent information
@@ -318,7 +318,7 @@ function handleStopIntent(request, context, amazonId) {
                 //No cases were fulfilled, throw error
             } else {
                 options.speechText = "Invalid option.To stop the conference, please provide a valid telephone number or BeAnywhere device.";
-                options.cardContent = "Invalid option.  To stop the conference, please provide a valid telephone number or BeAnywhere device.";
+                options.cardContent = "Invalid option. To stop the conference, please provide a valid telephone number or BeAnywhere device.";
                 //options.imageObj = phoneErrorImg;
                 options.cardTitle = "ERROR: Audio Conference Stop";
             }
@@ -328,14 +328,15 @@ function handleStopIntent(request, context, amazonId) {
             options.speechText = "There isn't an exisitng ongoing conference. To stop a conference, a conference must first be started.";
             options.cardContent = "There isn't an exisitng ongoing conference.  To stop a conference, a conference must first be started.";
             //options.imageObj = phoneErrorImg;
-            options.cardTitle = "ERROR: Vocal Conference Stop";
+            options.cardTitle = "ERROR: Audio Conference Stop";
         }
 
         //If no previous data exists for the current user, throw an error and refresh the data
     } else {
 
-        options.speechText = "Unknown usage error.The data associated with your Amazon ID for this skill was not able to be retrieved.Your data has been refreshed.Please start over and try again!";
-        options.cardContent = "Unknown usage error.  The data associated with your Amazon ID for this skill was not able to be retrieved.  Your data has been refreshed.  Please start over and try again!";
+        let usageErrMsg = "Invalid usage error. Unable to retrive information associated with your Amazon Id for this skill. Please restart and try again."
+        options.speechText = usageErrMsg;
+        options.cardContent = usageErrMsg;
         //options.imageObj = phoneErrorImg;
         options.cardTitle = "ERROR: Audio Conference Stop";
 
@@ -362,13 +363,10 @@ function handleStopIntent(request, context, amazonId) {
     if (process.env.NODE_DEBUG_EN) {
         console.log("\nStopIntent:\n" + JSON.stringify(options, null, 2));
     }
-
     context.succeed(buildResponse(options));
-
 }
 
 function addSpacing(text) {
-
     /*
     	Two spaces after period, question mark, and/or exclamation point, one space after final period, question mark, and/or exclamation point.
     	Incoming string has no spaces after any period, question mark, and/or exclamation point (with the exception of a justifiable use of a period, e.g. "Mr. Jones").
@@ -383,5 +381,4 @@ function addSpacing(text) {
 
     //Add a final space onto the end of the string and return the string
     return textSpace + " ";
-
 }
