@@ -38,15 +38,15 @@ var questionImg = {
 };
 
 //event = input JSON
-exports.handler = function(event,context) {
+exports.handler = function (event, context) {
 
     try {
 
         //Outputting the input JSON to the console
-		if(process.env.NODE_DEBUG_EN) {
-			console.log("Request:\n" + JSON.stringify(event,null,2));
+        if (process.env.NODE_DEBUG_EN) {
+            console.log("Request:\n" + JSON.stringify(event, null, 2));
         }
-        
+
         //specific objects of the event JSON
         var request = event.request;
 
@@ -54,7 +54,7 @@ exports.handler = function(event,context) {
         var amazonId = event.context.System.user.userId;
 
         //Checking to see if previous data does not exists for the current user of the skill
-        if(!(userInfo.hasOwnProperty(amazonId.valueOf()))) {
+        if (!(userInfo.hasOwnProperty(amazonId.valueOf()))) {
 
             //Creating an info JSON to store specific intent information
             var info = {
@@ -67,32 +67,32 @@ exports.handler = function(event,context) {
             userInfo[amazonId.valueOf()] = info;
 
         }
-        
+
         if (request.type === "LaunchRequest") {
 
-			handleLaunchRequest(context);
+            handleLaunchRequest(context);
 
-		} else if (request.type === "IntentRequest") {
+        } else if (request.type === "IntentRequest") {
 
-            if (request.intent.name === "StartIntent"){
+            if (request.intent.name === "StartIntent") {
 
-                handleStartIntent(request,context,amazonId);
+                handleStartIntent(request, context, amazonId);
 
             } else if (request.intent.name === "StopIntent") {
-                
-                handleStopIntent(request,context,amazonId);
+
+                handleStopIntent(request, context, amazonId);
 
             } else {
-                throw("Unknown intent");
+                throw ("Unknown intent");
             }
 
         } else if (request.type === "SessionEndedRequest") {
 
-		} else {
-			throw("Unknown intent type");
-		}
+        } else {
+            throw ("Unknown intent type");
+        }
 
-    } catch(e) {
+    } catch (e) {
         context.fail("Exception: " + e);
     }
 
@@ -101,10 +101,10 @@ exports.handler = function(event,context) {
 function buildResponse(options) {
 
     //Outputting the response options to the console
-	if(process.env.NODE_DEBUG_EN) {
-		console.log("\nbuildResponse options:\n" + JSON.stringify(options,null,2));
+    if (process.env.NODE_DEBUG_EN) {
+        console.log("\nbuildResponse options:\n" + JSON.stringify(options, null, 2));
     }
-    
+
     options.speechText = addSpacing(options.speechText);
 
     //response = output JSON
@@ -157,57 +157,57 @@ function buildResponse(options) {
     }
 
     //Outputting the output JSON to the console
-    if(process.env.NODE_DEBUG_EN) {
-		console.log("\nResponse:\n" + JSON.stringify(response,null,2));
+    if (process.env.NODE_DEBUG_EN) {
+        console.log("\nResponse:\n" + JSON.stringify(response, null, 2));
     }
-    
+
     return response;
 
 }
 
 function handleLaunchRequest(context) {
     let options = {};
-    options.speechText = "Welcome to the Audio Conference skill.Using this skill, you can start an audio conference on a telephone number or a Be Anywhere device.You can say, for example, ask audio conference to start a conference on <say-as interpret-as=\"telephone\">2155551234</say-as>, or, ask audio conference to start a conference on My Cell.";
-    options.cardContent = "Welcome to the Audio Conference skill.  Using this skill, you can start an audio conference on a telephone number or a Be Anywhere device.  You can say, for example, ask audio conference to start a conference on 2155551234, or, ask audio conference to start a conference on My Cell.";
-    options.cardTitle = "Audio Conference";
+    let lanuchWelcomeMessage = "Vocal Conference can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask vocal conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask Vocal Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill.";
+    options.speechText = lanuchWelcomeMessage;
+    options.cardContent = lanuchWelcomeMessage;
+    options.cardTitle = "Vocal Conference";
     options.imageObj = conferenceImg;
     options.endSession = true;
 
     //Outputting the userInfo JSON to the console
-    if(process.env.USERINFO_DEBUG_EN) {
-		console.log("\nuserInfo (LaunchRequest):\n" + JSON.stringify(userInfo,null,2));
+    if (process.env.USERINFO_DEBUG_EN) {
+        console.log("\nuserInfo (LaunchRequest):\n" + JSON.stringify(userInfo, null, 2));
     }
 
     //Outputting the Launch JSON to the console
-    if(process.env.NODE_DEBUG_EN) {
-		console.log("\nLaunch:\n" + JSON.stringify(options,null,2));
+    if (process.env.NODE_DEBUG_EN) {
+        console.log("\nLaunch:\n" + JSON.stringify(options, null, 2));
     }
 
     context.succeed(buildResponse(options));
 }
 
-function handleStartIntent(request,context,amazonId) {
+function handleStartIntent(request, context, amazonId) {
     let options = {};
 
     //The info JSON that will store specific intent information
     var info = {};
 
     //Checking to see if previous data exists for the current user of the skill
-    if(userInfo.hasOwnProperty(amazonId.valueOf())) {
+    if (userInfo.hasOwnProperty(amazonId.valueOf())) {
 
         //Retrieving the info JSON mapped to the Amazon ID of the user of the skill
         info = userInfo[amazonId.valueOf()];
 
         //Checking to see if slots exist
-        if (request.intent.slots.PN.value || request.intent.slots.BeAnywhere.value)
-        {
+        if (request.intent.slots.PN.value || request.intent.slots.BeAnywhere.value) {
             //Noting that we are coming from the intent StartIntent
             info.startIntent = true;
 
             //Checking to see which type of request is being made
             if (request.intent.slots.PN.value) {
                 let PN = request.intent.slots.PN.value;
-                options.speechText = `Your conference was started on <say-as interpret-as="telephone">${PN}</say-as>.`;
+                options.speechText = `Your conference was started on <say-as interpret-as=\"telephone\">${PN}</say-as>.`;
                 options.cardContent = `Your conference was started on ${PN}.`;
                 //Saving the phone number in the info JSON
                 info.PN = PN;
@@ -220,26 +220,26 @@ function handleStartIntent(request,context,amazonId) {
             }
 
             options.endSession = true;
-            options.imageObj = phoneStartImg;
+            //options.imageObj = phoneStartImg;
 
         } else {
 
-            options.speechText = "What device would you like to start your conference on?";
-            options.repromptText = "You can say a telephone number, such as <say-as interpret-as=\"telephone\">2155551234</say-as>, or say a Be Anywhere device, such as My Cell.";
-            options.cardContent = "You can say a telephone number, such as 2155551234, or say a Be Anywhere device, such as My Cell."
-            options.imageObj = questionImg;
+            options.speechText = "Which device would you like to start your conference on?";
+            options.repromptText = "You can say a telephone number, such as <say-as interpret-as=\"telephone\">2678157599</say-as>, or say a Be Anywhere device, such as My Cell.";
+            options.cardContent = "You can say a telephone number, such as 2678157599, or say a Be Anywhere device, such as My Cell."
+            //options.imageObj = questionImg;
             options.endSession = false;
 
         }
 
         options.cardTitle = "Audio Conference Start";
 
-    //If no previous data exists for the current user, throw an error and refresh the data
+        //If no previous data exists for the current user, throw an error and refresh the data
     } else {
 
         options.speechText = "Unknown usage error.The data associated with your Amazon ID for this skill was not able to be retrieved.Your data has been refreshed.Please start over and try again!";
         options.cardContent = "Unknown usage error.  The data associated with your Amazon ID for this skill was not able to be retrieved.  Your data has been refreshed.  Please start over and try again!";
-        options.imageObj = phoneErrorImg;
+        //options.imageObj = phoneErrorImg;
         options.cardTitle = "ERROR: Audio Conference Start";
 
         //Creating an info JSON to store specific intent information
@@ -255,88 +255,88 @@ function handleStartIntent(request,context,amazonId) {
     userInfo[amazonId.valueOf()] = info;
 
     //Outputting the userInfo JSON to the console
-    if(process.env.USERINFO_DEBUG_EN) {
-		console.log("\nuserInfo (StartIntent):\n" + JSON.stringify(userInfo,null,2));
+    if (process.env.USERINFO_DEBUG_EN) {
+        console.log("\nuserInfo (StartIntent):\n" + JSON.stringify(userInfo, null, 2));
     }
 
     //Outputting the StartIntent JSON to the console
-    if(process.env.NODE_DEBUG_EN) {
-		console.log("\nStartIntent:\n" + JSON.stringify(options,null,2));
+    if (process.env.NODE_DEBUG_EN) {
+        console.log("\nStartIntent:\n" + JSON.stringify(options, null, 2));
     }
 
     context.succeed(buildResponse(options));
 }
 
-function handleStopIntent(request,context,amazonId) {
+function handleStopIntent(request, context, amazonId) {
     let options = {};
 
     //The info JSON that will store specific intent information
     var info = {};
 
     //Checking to see if previous data exists for the current user of the skill
-    if(userInfo.hasOwnProperty(amazonId.valueOf())) {
+    if (userInfo.hasOwnProperty(amazonId.valueOf())) {
 
         //Retrieving the info JSON mapped to the Amazon ID of the user of the skill
         info = userInfo[amazonId.valueOf()];
 
         //Making sure we came from a the intent StartIntent
-        if(info.startIntent) {
+        if (info.startIntent) {
             //If a phone number was provided
             if (request.intent.slots.PN.value) {
                 //stop conference on the phone number that was provided
                 //stopConference(phone_number)
                 options.speechText = `Your conference was stopped on <say-as interpret-as="telephone">${request.intent.slots.PN.value}</say-as>.`;
                 options.cardContent = `Your conference was stopped on ${request.intent.slots.PN.value}.`;
-                options.imageObj = phoneStopImg;
+                //options.imageObj = phoneStopImg;
                 options.cardTitle = "Audio Conference Stop";
-            //If a Be Anywhere device was provided
+                //If a Be Anywhere device was provided
             } else if (request.intent.slots.BeAnywhere.value) {
                 //stop conference on the BeAnywhere device that was provided
                 //stopConference(be_anywhere)
                 options.speechText = `Your conference was stopped on ${request.intent.slots.BeAnywhere.value}.`;
                 options.cardContent = `Your conference was stopped on ${request.intent.slots.BeAnywhere.value}.`;
-                options.imageObj = phoneStopImg;
+                //options.imageObj = phoneStopImg;
                 options.cardTitle = "Audio Conference Stop";
-            //If a phone number was used to start the conference
+                //If a phone number was used to start the conference
             } else if (info.PN != "") {
                 //stop conference on the phone number that the conference was started on
                 //stopConference(phone_number)
                 options.speechText = `Your conference was stopped on <say-as interpret-as="telephone">${info.PN}</say-as>.`;
                 options.cardContent = `Your conference was stopped on ${info.PN}.`;
-                options.imageObj = phoneStopImg;
+                //options.imageObj = phoneStopImg;
                 options.cardTitle = "Audio Conference Stop";
 
-            //If a Be Anywhere device was used to start the conference
+                //If a Be Anywhere device was used to start the conference
             } else if (info.BeAnywhere != "") {
                 //stop conference on the BeAnywhere device that the conference was started on
                 //stopConference(be_anywhere)
                 options.speechText = `Your conference was stopped on ${info.BeAnywhere}.`;
                 options.cardContent = `Your conference was stopped on ${info.BeAnywhere}.`;
-                options.imageObj = phoneStopImg;
+                //options.imageObj = phoneStopImg;
                 options.cardTitle = "Audio Conference Stop";
 
-            //No cases were fulfilled, throw error
+                //No cases were fulfilled, throw error
             } else {
                 options.speechText = "Invalid option.To stop the conference, please provide a valid telephone number or BeAnywhere device.";
                 options.cardContent = "Invalid option.  To stop the conference, please provide a valid telephone number or BeAnywhere device.";
-                options.imageObj = phoneErrorImg;
+                //options.imageObj = phoneErrorImg;
                 options.cardTitle = "ERROR: Audio Conference Stop";
             }
 
-        //If we did not come from the intent StartIntent
+            //If we did not come from the intent StartIntent
         } else {
-            options.speechText = "Incorrect usage.To stop a conference, a conference must first be started.";
-            options.cardContent = "Incorrect usage.  To stop a conference, a conference must first be started.";
-            options.imageObj = phoneErrorImg;
-            options.cardTitle = "ERROR: Audio Conference Stop";
+            options.speechText = "There isn't an exisitng ongoing conference. To stop a conference, a conference must first be started.";
+            options.cardContent = "There isn't an exisitng ongoing conference.  To stop a conference, a conference must first be started.";
+            //options.imageObj = phoneErrorImg;
+            options.cardTitle = "ERROR: Vocal Conference Stop";
         }
 
-    //If no previous data exists for the current user, throw an error and refresh the data
+        //If no previous data exists for the current user, throw an error and refresh the data
     } else {
 
         options.speechText = "Unknown usage error.The data associated with your Amazon ID for this skill was not able to be retrieved.Your data has been refreshed.Please start over and try again!";
         options.cardContent = "Unknown usage error.  The data associated with your Amazon ID for this skill was not able to be retrieved.  Your data has been refreshed.  Please start over and try again!";
-        options.imageObj = phoneErrorImg;
+        //options.imageObj = phoneErrorImg;
         options.cardTitle = "ERROR: Audio Conference Stop";
 
     }
@@ -354,13 +354,13 @@ function handleStopIntent(request,context,amazonId) {
     userInfo[amazonId.valueOf()] = info;
 
     //Outputting the userInfo JSON to the console
-    if(process.env.USERINFO_DEBUG_EN) {
-		console.log("\nuserInfo (StopIntent):\n" + JSON.stringify(userInfo,null,2));
+    if (process.env.USERINFO_DEBUG_EN) {
+        console.log("\nuserInfo (StopIntent):\n" + JSON.stringify(userInfo, null, 2));
     }
 
     //Outputting the StopIntent JSON to the console
-    if(process.env.NODE_DEBUG_EN) {
-		console.log("\nStopIntent:\n" + JSON.stringify(options,null,2));
+    if (process.env.NODE_DEBUG_EN) {
+        console.log("\nStopIntent:\n" + JSON.stringify(options, null, 2));
     }
 
     context.succeed(buildResponse(options));
@@ -369,19 +369,19 @@ function handleStopIntent(request,context,amazonId) {
 
 function addSpacing(text) {
 
-	/*
-		Two spaces after period, question mark, and/or exclamation point, one space after final period, question mark, and/or exclamation point.
-		Incoming string has no spaces after any period, question mark, and/or exclamation point (with the exception of a justifiable use of a period, e.g. "Mr. Jones").
-	*/
+    /*
+    	Two spaces after period, question mark, and/or exclamation point, one space after final period, question mark, and/or exclamation point.
+    	Incoming string has no spaces after any period, question mark, and/or exclamation point (with the exception of a justifiable use of a period, e.g. "Mr. Jones").
+    */
 
-	//Find period with no space after it, replace with period with two spaces after it
-	var textSpace = text.replace(/\.(?=[^ ])/g, ".  ");
-	//Find question mark with no space after it, replace with question mark with two spaces after it
-	textSpace = textSpace.replace(/\?(?=[^ ])/g, "?  ");
-	//Find exclamation point with no space after it, replace with exclamation point with two spaces after it
-	textSpace = textSpace.replace(/\!(?=[^ ])/g, "!  ");
+    //Find period with no space after it, replace with period with two spaces after it
+    var textSpace = text.replace(/\.(?=[^ ])/g, ".  ");
+    //Find question mark with no space after it, replace with question mark with two spaces after it
+    textSpace = textSpace.replace(/\?(?=[^ ])/g, "?  ");
+    //Find exclamation point with no space after it, replace with exclamation point with two spaces after it
+    textSpace = textSpace.replace(/\!(?=[^ ])/g, "!  ");
 
-	//Add a final space onto the end of the string and return the string
-	return textSpace + " ";
+    //Add a final space onto the end of the string and return the string
+    return textSpace + " ";
 
 }
