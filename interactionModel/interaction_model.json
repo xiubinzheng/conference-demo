@@ -1,0 +1,75 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "audio conference",
+            "intents": [{
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "StartIntent",
+                    "slots": [{
+                            "name": "PN",
+                            "type": "AMAZON.PhoneNumber"
+                        },
+                        {
+                            "name": "BeAnywhere",
+                            "type": "BeAnywhere"
+                        }
+                    ],
+                    "samples": [
+                        "start a conference on {BeAnywhere}",
+                        "start a conference on {PN}"
+                    ]
+                },
+                {
+                    "name": "StopIntent",
+                    "slots": [{
+                            "name": "PN",
+                            "type": "AMAZON.PhoneNumber"
+                        },
+                        {
+                            "name": "BeAnywhere",
+                            "type": "BeAnywhere"
+                        }
+                    ],
+                    "samples": [
+                        "stop the conference",
+                        "stop the conference on {BeAnywhere}",
+                        "stop the conference on {PN}"
+                    ]
+                }
+            ],
+            "types": [{
+                "name": "BeAnywhere",
+                "values": [{
+                        "name": {
+                            "value": "mobile"
+                        }
+                    },
+                    {
+                        "name": {
+                            "value": "my cell"
+                        }
+                    }
+                ]
+            }]
+        }
+    }
+}
