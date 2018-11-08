@@ -3,8 +3,7 @@ package main
 import (
 	//"strings"
 
-	"audio_conference/lambdaFun/GoLang/alexa"
-
+	"./alexa"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
@@ -43,11 +42,11 @@ func HandleStartIntent(request alexa.Request) alexa.Response {
 
 		var builderReprompt alexa.SSMLBuilder
 
-		builder.Say("What device would you like to start your conference on? ")
+		builder.Say("Which device would you like to start your conference on? ")
 
-		builderReprompt.Say("You can say a telephone number, such as ")
-		builderReprompt.PN("2155551234")
-		builderReprompt.Say(", or say a Be Anywhere device, such as My Cell. ")
+		builder.Say("You can say a telephone number, such as ")
+		builder.PN("2678157599")
+		builder.Say(", or say a Be Anywhere device, such as My Cell. ")
 
 		return alexa.NewSSMLResponse("StartIntent NoDevices", builder.Build(), builderReprompt.Build(), false)
 
@@ -87,11 +86,8 @@ func HandleLaunchRequest(request alexa.Request) alexa.Response {
 
 	var builder alexa.SSMLBuilder
 
-	builder.Say("Welcome to the Audio Conference skill.  ")
-	builder.Say("Using this skill, you can start an audio conference on a telephone number or a Be Anywhere device.  ")
-	builder.Say("You can say, for example, ask audio conference to start a conference on ")
-	builder.PN("2155551234")
-	builder.Say(", or, ask audio conference to start a conference on My Cell. ")
+	builder.Say("My Conference skill can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask My conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask My Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill")
+	//builder.PN("2155551234")
 
 	return alexa.NewSSMLResponse("LaunchRequest", builder.Build(), "", true)
 
