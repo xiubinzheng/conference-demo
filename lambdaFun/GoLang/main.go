@@ -44,9 +44,9 @@ func HandleStartIntent(request alexa.Request) alexa.Response {
 
 		builder.Say("Which device would you like to start your conference on? ")
 
-		builder.Say("You can say a telephone number, such as ")
-		builder.PN("2678157599")
-		builder.Say(", or say a Be Anywhere device, such as My Cell. ")
+		builderReprompt.Say("You can say a telephone number, such as ")
+		builderReprompt.PN("2678157599")
+		builderReprompt.Say(", or say the name of a Be Anywhere device, such as My Cell. ")
 
 		return alexa.NewSSMLResponse("StartIntent NoDevices", builder.Build(), builderReprompt.Build(), false)
 
@@ -87,7 +87,6 @@ func HandleLaunchRequest(request alexa.Request) alexa.Response {
 	var builder alexa.SSMLBuilder
 
 	builder.Say("My Conference skill can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask My conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask My Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill")
-	//builder.PN("2155551234")
 
 	return alexa.NewSSMLResponse("LaunchRequest", builder.Build(), "", true)
 
@@ -113,64 +112,3 @@ func IntentDispatcher(request alexa.Request) alexa.Response {
 	return response
 
 }
-
-/*
-package main
-
-import (
-	"fmt"
-	//"encoding/json"
-	"strings"
-)
-
-type Info struct {
-	StartIntent bool
-	PN string
-	BeAnywhere string
-}
-
-type UserInfo struct {
-	UserId string
-	Info Info
-}
-
-type CardImg struct {
-	Small string
-	Large string
-}
-
-//<a href="https://www.iconfinder.com/icons/309047/conference_group_people_users_icon" target="_blank">"Conference, group, people, users icon"</a> by <a href="https://www.iconfinder.com/visualpharm" target="_blank">Ivan Boyko</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>
-//"Conference, group, people, users icon" (https://www.iconfinder.com/icons/309047/conference_group_people_users_icon) by Ivan Boyko (https://www.iconfinder.com/visualpharm) is licensed under CC BY 3.0 (http://creativecommons.org/licenses/by/3.0)
-var conferenceImg CardImg
-conferenceImg.Small = "https://s3.amazonaws.com/audio-conference/images/conferenceSmall.png"
-conferenceImg.Large = "https://s3.amazonaws.com/audio-conference/images/conferenceLarge.png"
-
-//<a href="https://www.iconfinder.com/icons/3324959/outgoing_phone_icon" target="_blank">"Outgoing, phone icon"</a> by <a href="https://www.iconfinder.com/colebemis" target="_blank">Cole Bemis</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>
-//"Outgoing, phone icon" (https://www.iconfinder.com/icons/3324959/outgoing_phone_icon) by Cole Bemis (https://www.iconfinder.com/colebemis) is licensed under CC BY 3.0 (http://creativecommons.org/licenses/by/3.0)
-var phoneStartImg CardImg
-phoneStartImg.Small = "https://s3.amazonaws.com/audio-conference/images/phoneStartSmall.png"
-phoneStartImg.Large = "https://s3.amazonaws.com/audio-conference/images/phoneStartLarge.png"
-
-//<a href="https://www.iconfinder.com/icons/3324961/missed_phone_icon" target="_blank">"Missed, phone icon"</a> by <a href="https://www.iconfinder.com/colebemis" target="_blank">Cole Bemis</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>
-//"Missed, phone icon" (https://www.iconfinder.com/icons/3324961/missed_phone_icon) by Cole Bemis (https://www.iconfinder.com/colebemis) is licensed under CC BY 3.0 (http://creativecommons.org/licenses/by/3.0)
-var phoneStopImg CardImg
-phoneStopImg.Small = "https://s3.amazonaws.com/audio-conference/images/phoneStopSmall.png"
-phoneStopImg.Large = "https://s3.amazonaws.com/audio-conference/images/phoneStopLarge.png"
-
-//<a href="https://www.iconfinder.com/icons/3324960/off_phone_icon" target="_blank">"Off, phone icon"</a> by <a href="https://www.iconfinder.com/colebemis" target="_blank">Cole Bemis</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>
-//"Off, phone icon" (https://www.iconfinder.com/icons/3324960/off_phone_icon) by Cole Bemis (https://www.iconfinder.com/colebemis) is licensed under CC BY 3.0 (http://creativecommons.org/licenses/by/3.0)
-var phoneErrorImg CardImg
-phoneErrorImg.Small = "https://s3.amazonaws.com/audio-conference/images/phoneErrorSmall.png"
-phoneErrorImg.Large = "https://s3.amazonaws.com/audio-conference/images/phoneErrorLarge.png"
-
-//<a href="https://www.iconfinder.com/icons/183285/help_mark_question_icon" target="_blank">"Help, mark, question icon"</a> by <a href="https://www.iconfinder.com/yanlu" target="_blank">Yannick Lung</a>
-//"Help, mark, question icon" (https://www.iconfinder.com/icons/183285/help_mark_question_icon) by Yannick Lung (https://www.iconfinder.com/yanlu)
-var questionImg CardImg
-questionImg.Small = "https://s3.amazonaws.com/audio-conference/images/questionSmall.png"
-questionImg.Large = "https://s3.amazonaws.com/audio-conference/images/questionLarge.png"
-
-
-func main() {
-	fmt.Println("Hello!")
-}
-*/

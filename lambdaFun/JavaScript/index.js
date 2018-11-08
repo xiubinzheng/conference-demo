@@ -225,8 +225,8 @@ function handleStartIntent(request, context, amazonId) {
         } else {
 
             options.speechText = "Which device would you like to start your conference on?";
-            options.repromptText = "You can say a telephone number, such as <say-as interpret-as=\"telephone\">2678157599</say-as>, or say a Be Anywhere device, such as My Cell.";
-            options.cardContent = "You can say a telephone number, such as 2678157599, or say a Be Anywhere device, such as My Cell."
+            options.repromptText = "You can say a telephone number, such as <say-as interpret-as=\"telephone\">2678157599</say-as>, or say the name of a Be Anywhere device, such as My Cell.";
+            options.cardContent = "You can say a telephone number, such as 2678157599, or say the name of a Be Anywhere device, such as My Cell."
             //options.imageObj = questionImg;
             options.endSession = false;
 
