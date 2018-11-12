@@ -3,13 +3,15 @@ package main
 import (
 	//"strings"
 
+	"log"
+
 	"./alexa"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
 func Handler(request alexa.Request) (alexa.Response, error) {
-	alexa.LogObject("Request", request)
+	//alexa.LogObject("Request", request)
 	return IntentDispatcher(request), nil
 }
 
@@ -18,17 +20,23 @@ func main() {
 }
 
 func HandleLaunchRequest(request alexa.Request) alexa.Response {
+	log.Print("test message")
+
+	alexa.LogObject("Requestxzzzzzz", request)
 
 	var builder alexa.SSMLBuilder
 
-	builder.Say("My Conference skill can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. You can say, 'Alexa, ask My conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' say 'Alexa, ask My Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill")
-
+	builder.Say("My Conference skill can start an Audio conference on your main line,a BeAnywhere phone, or any telephone number you like. ")
+	builder.Say("You can say, 'Alexa, ask My conference to start a conference on my main line.' Or, to start a conference on any one of your BeAnywhere phones, such as 'mobile,' ")
+	builder.Say("say 'Alexa, ask My Conference to start a conference on my mobile.' You will need to be a Comcast Business VoiceEdge subscriber to use this skill")
 	return alexa.NewSSMLResponse("LaunchRequest", builder.Build(), "", true, request.Session)
 
 }
 
 func HandleStartIntent(request alexa.Request) alexa.Response {
+	log.Print("test message")
 
+	alexa.LogObject("Requestxzzzzzz", request)
 	var builder alexa.SSMLBuilder
 
 	slots := request.Body.Intent.Slots
@@ -73,6 +81,7 @@ func HandleStartIntent(request alexa.Request) alexa.Response {
 }
 
 func HandleStopIntent(request alexa.Request) alexa.Response {
+	log.Print("test message")
 
 	var builder alexa.SSMLBuilder
 
@@ -101,6 +110,7 @@ func HandleStopIntent(request alexa.Request) alexa.Response {
 }
 
 func IntentDispatcher(request alexa.Request) alexa.Response {
+	log.Print("test message")
 
 	var response alexa.Response
 
@@ -124,6 +134,7 @@ func IntentDispatcher(request alexa.Request) alexa.Response {
 }
 
 func HandleStartDeviceIntent(request alexa.Request) alexa.Response {
+	log.Print("test message")
 
 	var builder alexa.SSMLBuilder
 

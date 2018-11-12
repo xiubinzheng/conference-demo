@@ -11,6 +11,7 @@ func LogObject(identifier string, obj interface{}) {
 	if err != nil {
 		log.Print("\r" + identifier + ":\r" + "ERROR: could not convert object to JSON")
 	} else {
+		log.Print()
 		log.Print("\r" + identifier + ":\r" + string(o))
 	}
 
